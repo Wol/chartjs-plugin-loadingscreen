@@ -16,6 +16,7 @@ export default {
 	},
 	text: {
 		content: 'Loading...',
+		style: 'normal 16px sans-serif',
 	},
 	currentOpacity: undefined,
 	visible: false,

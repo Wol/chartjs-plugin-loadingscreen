@@ -18,29 +18,35 @@ function drawLoadingScreen(chart, easing, options) {
 
 	var targetOpacity = (options.visible ? 1 : 0);
 
-	options.currentOpacity = resolve([options.currentOpacity, options.visible ? 1 : 0]);
 
-	if (options.currentOpacity !== targetOpacity || options.currentOpacity > 0) {
+	var linearOpacity = function(opts) {
+		var _targetOpacity = opts.targetOpacity;
+		var _easing = opts.easing;
+
+		return (_targetOpacity === 1) ? _easing : 1 - _easing;
+	};
+
+	var currentOpacity = resolve([options.currentOpacity, linearOpacity, options.visible ? 1 : 0], {
+		easing: easing,
+		targetOpacity: targetOpacity
+	});
+
+
+	if (currentOpacity > 0) {
 
 		ctx.save();
 
-		ctx.fillStyle = resolve([options.background.color, '#44444480']);
+		ctx.fillStyle = resolve([options.background.color, '#44444480'], {easing: easing, targetOpacity: targetOpacity});
 		ctx.strokeStyle = 'transparent';
 
 
-		if (targetOpacity === 1 && options.currentOpacity === 1) { // still in
-			options.currentOpacity = 1;
-		} else if (targetOpacity === 1) { // fading up
-			options.currentOpacity = easing;
-		} else { // fading out
-			options.currentOpacity = 1 - easing;
-		}
-
-		ctx.globalAlpha = options.currentOpacity;
+		ctx.globalAlpha = currentOpacity;
 
 		var chartArea = chart.chartArea;
-		var size = {height: chartArea.bottom - chartArea.top,
-			width: chartArea.right - chartArea.left};
+		var size = {
+			height: chartArea.bottom - chartArea.top,
+			width: chartArea.right - chartArea.left
+		};
 
 		var circularCharts = ['radar', 'pie', 'doughnut', 'polarArea'];
 		if (circularCharts.includes(chart.config.type) && options.background.shape !== 'rectangle') {
@@ -53,7 +59,7 @@ function drawLoadingScreen(chart, easing, options) {
 			ctx.fillRect(chartArea.left, chartArea.top, size.width, size.height);
 		}
 
-		var progresstext = resolve([options.text.content], {easing: easing}, 0);
+		var progresstext = resolve([options.text.content], {easing: easing, targetOpacity: targetOpacity});
 
 		if (progresstext) {
 
@@ -61,6 +67,7 @@ function drawLoadingScreen(chart, easing, options) {
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'middle';
 
+			ctx.font = options.text.style;
 			ctx.fillText(progresstext,
 				chartArea.left + (size.width) / 2,
 				chartArea.top + (size.height) / 2);
