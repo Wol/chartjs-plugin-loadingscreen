@@ -1,6 +1,6 @@
 {
   "name": "chartjs-plugin-loadingscreen",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Chart.js plugin to display a loading screen over the chart area",
   "main": "dist/chartjs-plugin-loadingscreen.js",
   "repository": {
@@ -14,7 +14,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "chartjs": "^0.3.24",
     "eslint-config-chartjs": "^0.1.0",
     "gulp-rename": "^1.4.0",
     "gulp-zip": "^4.2.0",
@@ -36,5 +35,6 @@
   },
   "peerDependencies": {
     "chart.js": ">= 2.7.0 < 3"
-  }
+  },
+  "dependencies": {}
 }
